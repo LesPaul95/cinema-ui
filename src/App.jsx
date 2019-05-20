@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from '@material-ui/core/';
+import { getNowPlaying } from './actions';
 import logo from './logo.svg';
 import './App.css';
 
@@ -8,7 +10,9 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edit
+          <code> src/App.js </code>
+           and save to reload.
         </p>
         <a
           className="App-link"
@@ -18,6 +22,9 @@ function App() {
         >
           Learn React
         </a>
+        <Button variant="contained" color="primary" onClick={() => console.log(getNowPlaying())}>
+          first button
+        </Button>
       </header>
     </div>
   );
