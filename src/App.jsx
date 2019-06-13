@@ -1,33 +1,29 @@
-import React from 'react';
+import * as React from 'react';
+import DevTools from 'mobx-react-devtools';
+import { observer } from 'mobx-react';
 import { Button } from '@material-ui/core/';
-import { getNowPlaying } from './actions';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          <code> src/App.js </code>
-           and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+@observer
+export class App extends React.Component {
+  onMoviesSearch = () => {
+    console.log(this.props);
+    this.props.moviesStore.getNowPlayingMovies(); //eslint-disable-line
+    // console.log(getNowPlaying());
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <DevTools />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={this.onMoviesSearch}
         >
-          Learn React
-        </a>
-        <Button variant="contained" color="primary" onClick={() => console.log(getNowPlaying())}>
           first button
         </Button>
-      </header>
-    </div>
-  );
+      </div>
+    );
+  }
 }
-
-export default App;

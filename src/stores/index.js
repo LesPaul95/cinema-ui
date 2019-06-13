@@ -1,18 +1,21 @@
-import { observable, action, computed } from "mobx";
+import { observable, action } from 'mobx';
+import { getNowPlaying } from '../actions';
 
-class FilterStore {
+class MoviesStore {
   @observable nowPlayingMovies;
 
   constructor() {
     this.nowPlayingMovies = {};
   }
 
-  @action setNowPlayingMovies = nowPlaying => {
+  @action getNowPlayingMovies = async () => {
+    const movies = await getNowPlaying();
+    this.setNowPlayingMovies(movies);
+  };
+
+  @action setNowPlayingMovies = (nowPlaying) => {
     this.nowPlayingMovies = nowPlaying;
   };
 }
 
-const filterStore = new FilterStore();
-
-export default filterStore;
-export { FilterStore };
+export const moviesStore = new MoviesStore();
