@@ -8,8 +8,8 @@ class MoviesStore {
     this.nowPlayingMovies = {};
   }
 
-  @action getNowPlayingMovies = async () => {
-    const movies = await getNowPlaying();
+  @action getNowPlayingMovies = async (page = 1) => {
+    const movies = await getNowPlaying(page);
     this.setNowPlayingMovies(movies);
   };
 

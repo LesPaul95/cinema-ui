@@ -1,0 +1,47 @@
+import * as React from 'react';
+import { observer, inject } from 'mobx-react';
+import { Paper, TablePagination } from '@material-ui/core/';
+import { NowPlayingInfoTable } from './components/NowPlayingInfoTable';
+
+@inject('moviesStore')
+@observer
+export class NowPlaying extends React.Component {
+  componentDidMount() {
+    const { moviesStore } = this.props;
+    moviesStore.getNowPlayingMovies();
+  }
+
+  handleChangePage = (_, pageNumber) => {
+    const { moviesStore } = this.props;
+    moviesStore.getNowPlayingMovies(pageNumber + 1);
+  };
+
+  render() {
+    const { moviesStore: { nowPlayingMovies } } = this.props;
+    return (
+      <>
+        {nowPlayingMovies.status === 200 && (
+          <Paper>
+            <NowPlayingInfoTable
+              results={nowPlayingMovies.results}
+            />
+            <TablePagination
+              component="div"
+              rowsPerPageOptions={[0]}
+              count={nowPlayingMovies.total_results}
+              rowsPerPage={nowPlayingMovies.results.length}
+              page={nowPlayingMovies.page - 1}
+              backIconButtonProps={{
+                'aria-label': 'Previous Page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'Next Page',
+              }}
+              onChangePage={this.handleChangePage}
+            />
+          </Paper>
+        )}
+      </>
+    );
+  }
+}
