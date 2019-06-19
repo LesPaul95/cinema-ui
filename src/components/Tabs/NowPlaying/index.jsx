@@ -1,4 +1,6 @@
+// Tab on MobX
 import * as React from 'react';
+import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { Paper, TablePagination } from '@material-ui/core/';
 import { NowPlayingInfoTable } from './components/NowPlayingInfoTable';
@@ -8,7 +10,9 @@ import { NowPlayingInfoTable } from './components/NowPlayingInfoTable';
 export class NowPlaying extends React.Component {
   componentDidMount() {
     const { moviesStore } = this.props;
-    moviesStore.getNowPlayingMovies();
+    if (get(moviesStore, 'nowPlayingMovies.status') !== 200) {
+      moviesStore.getNowPlayingMovies();
+    }
   }
 
   handleChangePage = (_, pageNumber) => {

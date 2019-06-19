@@ -2,8 +2,7 @@ import * as React from 'react';
 import DevTools from 'mobx-react-devtools';
 import { observer, inject } from 'mobx-react';
 import { Container } from '@material-ui/core/';
-import { NowPlaying } from '../Tabs/NowPlaying';
-
+import { ScrollableTabsButtonAuto } from '../Header';
 @inject('moviesStore')
 
 @observer
@@ -13,7 +12,7 @@ export class App extends React.Component {
       <>
         <DevTools />
         <Container>
-          <NowPlaying />
+          <ScrollableTabsButtonAuto />
         </Container>
       </>
     );
