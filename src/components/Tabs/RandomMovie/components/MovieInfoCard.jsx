@@ -19,11 +19,18 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 340,
     height: 'auto',
+    display: 'flex',
+    flexDirection: 'row',
   },
   media: {
-    height: 500,
+    width: '50%',
+    height: '510px',
+
+  },
+  info: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -50,48 +57,48 @@ export function MovieInfoCard({ movie }) {
 
   return (
     <Card className={classes.card}>
-      <CardHeader
-        avatar={(
-          <Avatar className={classes.avatar}>
-            {movie.vote_average}
-          </Avatar>
-        )}
-        title={movie.title}
-        subheader={moment(movie.release_date).format('DD.MM.YYYY')}
-      />
       <CardMedia
         className={classes.media}
         image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
         title={movie.title}
       />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          Имена актеров
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="Add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="Share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="Show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <div className={classes.info}>
+        <CardHeader
+          avatar={
+            <Avatar className={classes.avatar}>{movie.vote_average}</Avatar>
+          }
+          title={movie.title}
+          subheader={moment(movie.release_date).format('DD.MM.YYYY')}
+        />
         <CardContent>
-          <Typography paragraph>{movie.overview}</Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Имена актеров
+          </Typography>
         </CardContent>
-      </Collapse>
+        <CardActions disableSpacing>
+          <IconButton aria-label="Add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph>{movie.overview}</Typography>
+          </CardContent>
+        </Collapse>
+      </div>
     </Card>
   );
 }

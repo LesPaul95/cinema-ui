@@ -19,7 +19,7 @@ import { RandomMovie } from '../Tabs/RandomMovie';
 
 const styles = {
   paperContainer: {
-    backgroundImage: 'url(https://image.tmdb.org/t/p/original/v4yVTbbl8dE1UP2dWu5CLyaXOku.jpg)',
+    backgroundColor: '#240B05',
     padding: '10px',
   },
 };

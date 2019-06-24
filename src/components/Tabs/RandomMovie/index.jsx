@@ -1,11 +1,13 @@
 // Tab on React Hooks
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { random } from 'lodash';
 import { Button, Grid, Typography } from '@material-ui/core';
 import { getRandomMoviesList } from '../../../actions';
-import { MultiplyGenresList } from './components/MultiplyGenresList';
+import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
+import { MultipleCountriesList } from './components/MultipleCountriesList';
+import { VoteRange } from './components/VoteRange';
 
 function getCurrentYear() {
   const date = new Date();
@@ -17,33 +19,48 @@ const currentYear = getCurrentYear();
 
 export function RandomMovie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedCountries, setSelectedCountries] = useState([]);
   const [yearRange, setYearRange] = useState([minYear, currentYear]);
+  const [voteRange, setVoteRange] = useState([0, 10]);
   const [randomMovie, setRandomMovie] = useState(null);
 
   const handleFindMovie = async () => {
     const { results } = await getRandomMoviesList(yearRange);
     setRandomMovie(results[random(0, results.length - 1)]);
-    console.log(randomMovie);
   };
 
   const handleYearRangeChange = (event, newValue) => {
     setYearRange(newValue);
   };
 
-  const handleMultiplyGenresListChange = (event) => {
-    setSelectedGenres(event.target.value);
-  };
+  useEffect(() => {
+    async function findFirstRandomMovie() {
+      await handleFindMovie();
+    }
+    findFirstRandomMovie();
+  }, []);
 
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
-      <Grid container spacing={5}>
-        <Grid item xs={6}>
-          <MultiplyGenresList
+      <Grid container spacing={10}>
+        <Grid item xs={4}>
+          <MultipleGenresList
             selectedGenres={selectedGenres}
-            handleMultiplyGenresListChange={handleMultiplyGenresListChange}
+            setSelectedGenres={setSelectedGenres}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
+          <VoteRange voteRange={voteRange} setVoteRange={setVoteRange} />
+        </Grid>
+        <Grid item xs={4}>
+          <MultipleCountriesList
+            selectedCountries={selectedCountries}
+            setSelectedCountries={setSelectedCountries}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={5} justify="center">
+        <Grid item xs={10}>
           <YearRange
             yearRange={yearRange}
             handleYearRangeChange={handleYearRangeChange}
@@ -52,7 +69,7 @@ export function RandomMovie() {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={5}>
+      <Grid container spacing={5} justify="center">
         <Grid item xs={8}>
           <Button
             fullWidth
@@ -65,7 +82,7 @@ export function RandomMovie() {
         </Grid>
       </Grid>
       {randomMovie && (
-        <Grid container spacing={5}>
+        <Grid container spacing={5} justify="center">
           <Grid item xs={8}>
             <MovieInfoCard movie={randomMovie} />
           </Grid>

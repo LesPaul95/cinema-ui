@@ -5,7 +5,8 @@ import Slider from '@material-ui/lab/Slider';
 
 const useStyles = makeStyles({
   root: {
-    width: 300,
+    width: '100%',
+    margin: 'auto',
   },
 });
 
@@ -13,6 +14,16 @@ export function YearRange({
   yearRange, handleYearRangeChange, minYear, maxYear,
 }) {
   const classes = useStyles();
+  const marks = [
+    {
+      value: minYear,
+      label: minYear,
+    },
+    {
+      value: maxYear,
+      label: maxYear,
+    },
+  ];
 
   return (
     <div className={classes.root}>
@@ -22,10 +33,11 @@ export function YearRange({
       <Slider
         value={yearRange}
         onChange={handleYearRangeChange}
-        valueLabelDisplay="on"
+        valueLabelDisplay="auto"
         aria-labelledby="range-slider"
         min={minYear}
         max={maxYear}
+        marks={marks}
       />
     </div>
   );
