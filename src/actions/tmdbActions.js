@@ -46,3 +46,12 @@ export const getGenresList = async () => {
   console.log({ status, data });
   return { status, ...data };
 };
+
+export const getMovieCastAndCrew = async (movieId) => {
+  console.log('getMovieActorsAndCrew');
+  const { data } = await axios.get(
+    `${themoviedbUri}/movie/${movieId}/credits?api_key=440220d48afb156283f60fe68cbb2920`,
+  );
+  console.log(data);
+  return data;
+};

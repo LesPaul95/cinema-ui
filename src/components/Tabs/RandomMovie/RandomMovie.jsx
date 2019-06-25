@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { random } from 'lodash';
 import { Button, Grid, Typography } from '@material-ui/core';
-import { getRandomMoviesList } from '../../../actions';
+import { getRandomMoviesList, getMovieCastAndCrew } from '../../../actions';
 import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
@@ -16,15 +16,19 @@ function getCurrentYear() {
 const minYear = 1970;
 const currentYear = getCurrentYear();
 
-export function RandomMovie({ genres }) {
+export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }) {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [yearRange, setYearRange] = useState([minYear, currentYear]);
   const [voteRange, setVoteRange] = useState([0, 10]);
   const [randomMovie, setRandomMovie] = useState(null);
 
   const handleFindMovie = async () => {
-    const { results } = await getRandomMoviesList(yearRange, voteRange, selectedGenres.join(','));
-    setRandomMovie(results[random(0, results.length - 1)]);
+    const genresIds = getGenresIdsByNames(selectedGenres);
+    const { results } = await getRandomMoviesList(yearRange, voteRange, genresIds);
+    const randomMovieResponse = results[random(0, results.length - 1)];
+    const castAndCrew = await getMovieCastAndCrew(randomMovieResponse.id);
+    console.log({ ...randomMovieResponse, ...castAndCrew });
+    setRandomMovie({ ...randomMovieResponse, ...castAndCrew });
   };
 
   const handleYearRangeChange = (event, newValue) => {
@@ -77,7 +81,10 @@ export function RandomMovie({ genres }) {
       {randomMovie && (
         <Grid container spacing={5} justify="center">
           <Grid item xs={8}>
-            <MovieInfoCard movie={randomMovie} />
+            <MovieInfoCard
+              movie={randomMovie}
+              getGenresNamesByIds={getGenresNamesByIds}
+            />
           </Grid>
         </Grid>
       )}

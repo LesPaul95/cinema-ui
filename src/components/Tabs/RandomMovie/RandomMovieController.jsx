@@ -7,7 +7,13 @@ import { RandomMovie } from './RandomMovie';
 @observer
 export class RandomMovieController extends React.Component {
   render() {
-    const { dictionariesStore: { genres } } = this.props;
-    return <RandomMovie genres={genres} />;
+    const { dictionariesStore: { genres, getGenresIdsByNames, getGenresNamesByIds } } = this.props;
+    return (
+      <RandomMovie
+        genres={genres}
+        getGenresIdsByNames={getGenresIdsByNames}
+        getGenresNamesByIds={getGenresNamesByIds}
+      />
+    );
   }
 }

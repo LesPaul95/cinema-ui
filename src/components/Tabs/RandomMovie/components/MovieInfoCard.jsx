@@ -47,8 +47,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export function MovieInfoCard({ movie }) {
+export function MovieInfoCard({ movie, getGenresNamesByIds }) {
   const classes = useStyles();
+  const cast = movie.cast || [];
   const [expanded, setExpanded] = React.useState(false);
 
   function handleExpandClick() {
@@ -72,7 +73,7 @@ export function MovieInfoCard({ movie }) {
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            Имена актеров
+            {getGenresNamesByIds(movie.genre_ids)}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -93,6 +94,13 @@ export function MovieInfoCard({ movie }) {
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
+        <CardContent>
+          {cast.map((man, index) => index < 8 && (
+            <Typography variant="body2" color="textSecondary" component="p" key={man.id}>
+              {man.name}
+            </Typography>
+          ))}
+        </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>{movie.overview}</Typography>

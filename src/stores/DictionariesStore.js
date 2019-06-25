@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx';
-import { sortBy } from 'lodash';
+import {
+  sortBy, find, get, map,
+} from 'lodash';
 import { getGenresList } from '../actions';
 
 class DictionariesStore {
@@ -17,6 +19,10 @@ class DictionariesStore {
   @action setGenres = (tmdbGenres) => {
     this.genres = tmdbGenres;
   };
+
+  @action getGenresIdsByNames = genresNames => map(genresNames, gName => get(find(this.genres, { name: gName }), 'id')).join(',');
+
+  @action getGenresNamesByIds = genresIds => map(genresIds, gId => get(find(this.genres, { id: gId }), 'name')).join(', ');
 }
 
 export const dictionariesStore = new DictionariesStore();
