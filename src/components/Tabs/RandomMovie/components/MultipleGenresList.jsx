@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { sortBy } from 'lodash';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,7 +7,6 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import { getGenresList } from '../../../../actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,16 +31,8 @@ const MenuProps = {
   },
 };
 
-export function MultipleGenresList({ selectedGenres, setSelectedGenres }) {
+export function MultipleGenresList({ genres, selectedGenres, setSelectedGenres }) {
   const classes = useStyles();
-  const [genres, setGenres] = useState([]);
-  useEffect(() => {
-    async function fetchGenres() {
-      const { genres: genresResponse } = await getGenresList();
-      setGenres(sortBy(genresResponse, ['name']) || []);
-    }
-    fetchGenres();
-  }, []);
 
   function handleChange(event) {
     setSelectedGenres(event.target.value);

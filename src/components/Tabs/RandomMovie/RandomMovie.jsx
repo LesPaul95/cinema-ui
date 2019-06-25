@@ -6,7 +6,6 @@ import { getRandomMoviesList } from '../../../actions';
 import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
-import { MultipleCountriesList } from './components/MultipleCountriesList';
 import { VoteRange } from './components/VoteRange';
 
 function getCurrentYear() {
@@ -17,15 +16,14 @@ function getCurrentYear() {
 const minYear = 1970;
 const currentYear = getCurrentYear();
 
-export function RandomMovie() {
+export function RandomMovie({ genres }) {
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedCountries, setSelectedCountries] = useState([]);
   const [yearRange, setYearRange] = useState([minYear, currentYear]);
   const [voteRange, setVoteRange] = useState([0, 10]);
   const [randomMovie, setRandomMovie] = useState(null);
 
   const handleFindMovie = async () => {
-    const { results } = await getRandomMoviesList(yearRange);
+    const { results } = await getRandomMoviesList(yearRange, voteRange, selectedGenres.join(','));
     setRandomMovie(results[random(0, results.length - 1)]);
   };
 
@@ -42,21 +40,16 @@ export function RandomMovie() {
 
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
-      <Grid container spacing={10}>
-        <Grid item xs={4}>
+      <Grid container spacing={10} justify="center">
+        <Grid item xs={5}>
           <MultipleGenresList
+            genres={genres}
             selectedGenres={selectedGenres}
             setSelectedGenres={setSelectedGenres}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <VoteRange voteRange={voteRange} setVoteRange={setVoteRange} />
-        </Grid>
-        <Grid item xs={4}>
-          <MultipleCountriesList
-            selectedCountries={selectedCountries}
-            setSelectedCountries={setSelectedCountries}
-          />
         </Grid>
       </Grid>
       <Grid container spacing={5} justify="center">
