@@ -47,7 +47,7 @@ function ScrollableTabsButtonController({ location }) {
 
   return (
     <div className={classes.root}>
-      <Paper style={styles.paperContainer}>123</Paper>
+      <Paper style={styles.paperContainer} />
       <AppBar position="static" color="default">
         <Tabs
           value={value}

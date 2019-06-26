@@ -12,10 +12,8 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// import StarRate from '@material-ui/icons/StarRate';
+import { Grid } from '@material-ui/core/';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -25,12 +23,13 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     width: '50%',
-    height: '510px',
+    height: '570px',
 
   },
   info: {
     display: 'flex',
     flexDirection: 'column',
+    width: '50%',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -57,56 +56,63 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
   }
 
   return (
-    <Card className={classes.card}>
-      <CardMedia
-        className={classes.media}
-        image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        title={movie.title}
-      />
-      <div className={classes.info}>
-        <CardHeader
-          avatar={
-            <Avatar className={classes.avatar}>{movie.vote_average}</Avatar>
-          }
+    <>
+      <Card className={classes.card}>
+        <CardMedia
+          className={classes.media}
+          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           title={movie.title}
-          subheader={moment(movie.release_date).format('DD.MM.YYYY')}
         />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {getGenresNamesByIds(movie.genre_ids)}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <CardContent>
-          {cast.map((man, index) => index < 8 && (
-            <Typography variant="body2" color="textSecondary" component="p" key={man.id}>
-              {man.name}
-            </Typography>
-          ))}
-        </CardContent>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <div className={classes.info}>
+          <CardHeader
+            avatar={
+              <Avatar className={classes.avatar}>{movie.vote_average}</Avatar>
+            }
+            title={movie.title}
+            subheader={moment(movie.release_date).format('DD.MM.YYYY')}
+          />
           <CardContent>
-            <Typography paragraph>{movie.overview}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {getGenresNamesByIds(movie.genre_ids)}
+            </Typography>
           </CardContent>
-        </Collapse>
-      </div>
-    </Card>
+          <CardContent>
+            {cast.map(
+              (man, index) => index < 15 && (
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="p"
+                key={man.id}
+              >
+                {man.name}
+              </Typography>
+              ),
+            )}
+          </CardContent>
+          <CardActions disableSpacing>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="Show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+        </div>
+      </Card>
+      <Grid container spacing={5} justify="center">
+        <Grid item xs={12}>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography paragraph>{movie.overview}</Typography>
+            </CardContent>
+          </Collapse>
+        </Grid>
+      </Grid>
+    </>
   );
 }

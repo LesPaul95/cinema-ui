@@ -1,4 +1,5 @@
 import * as React from 'react';
+import moment from 'moment';
 import {
   Table, TableBody, TableCell, TableRow,
 } from '@material-ui/core/';
@@ -13,7 +14,7 @@ export const NowPlayingInfoTable = props => (
             {row.title}
           </TableCell>
           <TableCell>{row.overview}</TableCell>
-          <TableCell>{row.release_date}</TableCell>
+          <TableCell>{moment(row.release_date).format('DD.MM.YYYY')}</TableCell>
           <TableCell>{row.vote_average}</TableCell>
         </TableRow>
       ))}
