@@ -20,6 +20,22 @@ export function YearRange({
       label: minYear,
     },
     {
+      value: minYear + 10,
+      label: minYear + 10,
+    },
+    {
+      value: minYear + 20,
+      label: minYear + 20,
+    },
+    {
+      value: minYear + 30,
+      label: minYear + 30,
+    },
+    {
+      value: minYear + 40,
+      label: minYear + 40,
+    },
+    {
       value: maxYear,
       label: maxYear,
     },
