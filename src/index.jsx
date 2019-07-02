@@ -25,8 +25,6 @@ const theme = createMuiTheme({
   },
 });
 
-console.log(theme);
-
 ReactDOM.render(
   <Provider {...stores}>
     <Router>
