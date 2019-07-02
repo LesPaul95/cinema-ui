@@ -1,7 +1,10 @@
 import * as React from 'react';
-import DevTools from 'mobx-react-devtools';
 import { observer, inject } from 'mobx-react';
 import { Header } from '../Header';
+
+const DevTools = React.lazy(() => (process.env.NODE_ENV === 'production'
+  ? Promise.resolve({ default: () => null })
+  : import('mobx-react-devtools')));
 
 @inject('moviesStore')
 @inject('dictionariesStore')
@@ -15,7 +18,9 @@ export class App extends React.Component {
   render() {
     return (
       <>
-        <DevTools />
+        <React.Suspense fallback={null}>
+          <DevTools />
+        </React.Suspense>
         <Header />
       </>
     );
