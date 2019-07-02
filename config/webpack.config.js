@@ -30,6 +30,8 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 const postcssNormalize = require('postcss-normalize');
 
+console.log(`${path.dirname(__dirname)}\\build`, '123123123');
+
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -610,12 +612,14 @@ module.exports = function(webpackEnv) {
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
         }),
-      new PrerenderSPAPlugin({
-        // Required - The path to the webpack-outputted app to prerender.
-        staticDir: path.join(__dirname, 'dist'),
-        // Required - Routes to render.
-        routes: ['/', '/random-movie']
-      }),
+      isEnvProduction &&
+        new PrerenderSPAPlugin({
+          // Required - The path to the webpack-outputted app to prerender.
+          staticDir: `${path.dirname(__dirname)}\\build`,
+          // Required - Routes to render.
+          routes: ['/', '/nowplaying']
+        }
+      ),  
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

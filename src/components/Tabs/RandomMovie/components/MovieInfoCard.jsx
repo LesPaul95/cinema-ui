@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import moment from 'moment';
-import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Collapse,
+  Avatar,
+  IconButton,
+  Typography,
+  Grid,
+  Paper,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Grid } from '@material-ui/core/';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -55,6 +58,8 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
     setExpanded(!expanded);
   }
 
+  useEffect(() => setExpanded(false), [movie]);
+
   return (
     <>
       <Card className={classes.card}>
@@ -90,7 +95,7 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
               ),
             )}
           </CardContent>
-          <CardActions disableSpacing>
+          <CardActions>
             <IconButton
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
@@ -98,21 +103,27 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
               onClick={handleExpandClick}
               aria-expanded={expanded}
               aria-label="Show more"
+              disabled={!movie.overview}
             >
               <ExpandMoreIcon />
             </IconButton>
           </CardActions>
         </div>
       </Card>
-      <Grid container spacing={5} justify="center">
-        <Grid item xs={12}>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent>
-              <Typography paragraph>{movie.overview}</Typography>
-            </CardContent>
-          </Collapse>
-        </Grid>
-      </Grid>
+      {!!movie.overview && (
+        <>
+          <br />
+          <Grid container spacing={5} justify="center">
+            <Grid item xs={12}>
+              <Paper>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <Typography paragraph>{movie.overview}</Typography>
+                </Collapse>
+              </Paper>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 }
