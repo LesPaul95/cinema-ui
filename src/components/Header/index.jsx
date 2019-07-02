@@ -4,7 +4,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 // import Typography from '@material-ui/core/Typography';
-import { Paper } from '@material-ui/core/';
 import { withRouter, Link, Route } from 'react-router-dom';
 import { NowPlaying } from '../Tabs/NowPlaying';
 import { RandomMovie } from '../Tabs/RandomMovie';
@@ -17,27 +16,18 @@ import { RandomMovie } from '../Tabs/RandomMovie';
 //   );
 // }
 
-const styles = {
-  paperContainer: {
-    backgroundColor: '#240B05',
-    padding: '10px',
-  },
-};
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    padding: '15px',
   },
-}));
+});
 
 const routesToTabs = Object.freeze({
   '/': 0,
-  '/random-movie': 1,
+  '/nowplaying': 1,
 });
 
-function ScrollableTabsButtonController({ location }) {
+function HeaderController({ location }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(routesToTabs[location.pathname] || 0);
 
@@ -46,25 +36,24 @@ function ScrollableTabsButtonController({ location }) {
   }
 
   return (
-    <div className={classes.root}>
-      <Paper style={styles.paperContainer} />
-      <AppBar position="static" color="default">
+    <>
+      <AppBar position="static" color="primary" variant="fullWidth" classes={classes}>
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor="secondary"
+          textColor="secondary"
           scrollButtons="auto"
           centered
         >
-          <Tab label="В прокате" component={Link} to="/" />
-          <Tab label="Случайный фильм" component={Link} to="/random-movie" />
+          <Tab label="Случайный фильм" component={Link} to="/" />
+          <Tab label="В прокате" component={Link} to="/nowplaying" />
         </Tabs>
       </AppBar>
-      <Route exact path="/" component={NowPlaying} />
-      <Route path="/random-movie" component={RandomMovie} />
-    </div>
+      <Route exact path="/" component={RandomMovie} />
+      <Route exact path="/nowplaying" component={NowPlaying} />
+    </>
   );
 }
 
-export const ScrollableTabsButtonAuto = withRouter(ScrollableTabsButtonController);
+export const Header = withRouter(HeaderController);

@@ -19,13 +19,12 @@ function getCurrentYear() {
 const minYear = 1970;
 const currentYear = getCurrentYear();
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
   },
   wrapper: {
-    margin: theme.spacing(1),
     position: 'relative',
   },
   buttonSuccess: {
@@ -49,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
-}));
+});
 
 export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }) {
   const classes = useStyles();
@@ -64,7 +63,8 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
     const genresIds = getGenresIdsByNames(selectedGenres);
     const { results } = await getRandomMoviesList(yearRange, voteRange, genresIds);
     const randomMovieResponse = results[random(0, results.length - 1)];
-    const castAndCrew = await getMovieCastAndCrew(randomMovieResponse.id);
+    const castAndCrew = randomMovieResponse && randomMovieResponse.id
+      ? await getMovieCastAndCrew(randomMovieResponse.id) : {};
     console.log({ ...randomMovieResponse, ...castAndCrew });
     setRandomMovie({ ...randomMovieResponse, ...castAndCrew });
     setIsLoading(false);
@@ -84,7 +84,7 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
   return (
     <Container>
       <Typography component="div" style={{ padding: 8 * 3 }}>
-        <Grid container spacing={10} justify="center">
+        <Grid container spacing={5} justify="center">
           <Grid item xs={5}>
             <MultipleGenresList
               genres={genres}
@@ -111,7 +111,7 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
             <div className={classes.wrapper}>
               <Button
                 fullWidth
-                color="secondary"
+                color="primary"
                 variant="contained"
                 onClick={handleFindMovie}
                 disabled={isLoading}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DevTools from 'mobx-react-devtools';
 import { observer, inject } from 'mobx-react';
-import { ScrollableTabsButtonAuto } from '../Header';
+import { Header } from '../Header';
 
 @inject('moviesStore')
 @inject('dictionariesStore')
@@ -16,7 +16,7 @@ export class App extends React.Component {
     return (
       <>
         <DevTools />
-        <ScrollableTabsButtonAuto />
+        <Header />
       </>
     );
   }

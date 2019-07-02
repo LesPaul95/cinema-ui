@@ -52,7 +52,10 @@ export function MultipleGenresList({ genres, selectedGenres, setSelectedGenres }
         >
           {genres.map(selected => (
             <MenuItem key={selected.name} value={selected.name}>
-              <Checkbox checked={selectedGenres.indexOf(selected.name) > -1} />
+              <Checkbox
+                checked={selectedGenres.indexOf(selected.name) > -1}
+                color="primary"
+              />
               <ListItemText primary={selected.name} />
             </MenuItem>
           ))}
