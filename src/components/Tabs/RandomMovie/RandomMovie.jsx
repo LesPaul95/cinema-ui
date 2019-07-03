@@ -85,14 +85,14 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
     <Container>
       <Typography component="div" style={{ padding: 8 * 3 }}>
         <Grid container spacing={5} justify="center">
-          <Grid item xs={5}>
+          <Grid item xs={10} md={5}>
             <MultipleGenresList
               genres={genres}
               selectedGenres={selectedGenres}
               setSelectedGenres={setSelectedGenres}
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={10} md={5}>
             <VoteRange voteRange={voteRange} setVoteRange={setVoteRange} />
           </Grid>
         </Grid>
@@ -129,7 +129,7 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
         </Grid>
         {randomMovie && (
           <Grid container spacing={5} justify="center">
-            <Grid item xs={8}>
+            <Grid item xs={10} md={8}>
               <MovieInfoCard
                 movie={randomMovie}
                 getGenresNamesByIds={getGenresNamesByIds}
