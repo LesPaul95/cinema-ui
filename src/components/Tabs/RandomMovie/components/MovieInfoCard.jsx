@@ -1,38 +1,32 @@
 import React, { useEffect } from 'react';
-import moment from 'moment';
-import clsx from 'clsx';
+// import moment from 'moment';
+// import clsx from 'clsx';
 import {
-  Card,
-  CardHeader,
-  CardMedia,
-  CardContent,
-  CardActions,
+  // Card,
+  // CardHeader,
+  // CardMedia,
+  // CardContent,
+  // CardActions,
   Collapse,
   Avatar,
-  IconButton,
+  // IconButton,
   Typography,
   Grid,
   Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { grey } from '@material-ui/core/colors';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
-  card: {
-    height: 'auto',
-    display: 'flex',
-    flexDirection: 'row',
+  cardHeader: {
+    backgroundColor: '#3A2E39',
   },
-  media: {
-    width: '50%',
-    height: '570px',
-
+  cast: {
+    margin: '5px',
   },
-  info: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '50%',
+  overwiew: {
+    margin: '1em',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -45,7 +39,10 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: grey[500],
+    margin: 'auto',
+    width: 60,
+    height: 60,
   },
 }));
 
@@ -54,15 +51,70 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
   const cast = movie.cast || [];
   const [expanded, setExpanded] = React.useState(false);
 
-  function handleExpandClick() {
-    setExpanded(!expanded);
-  }
+  // function handleExpandClick() {
+  //   setExpanded(!expanded);
+  // }
 
   useEffect(() => setExpanded(false), [movie]);
 
+  const width = document.getElementById('movieInfoGridContainer') && document.getElementById('movieInfoGridContainer').offsetWidth;
+
   return (
     <>
-      <Card className={classes.card}>
+      <Paper>
+
+        <Grid container justify="center" className={classes.cardHeader}>
+          <Grid item xs={1}>
+            <Avatar>{movie.vote_average}</Avatar>
+          </Grid>
+          <Grid item xs={11}>
+            <Typography variant="body1" color="secondary" component="p">
+              {movie.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {getGenresNamesByIds(movie.genre_ids)}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2} justify="center" id="movieInfoGridContainer">
+          <Grid item xs={6}>
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt=""
+              width={width / 2}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Grid container justify="center">
+              {cast.map(
+                (man, index) => index < 5 && (
+                  <div key={man.id} className={classes.cast}>
+                    <Avatar
+                      className={classes.avatar}
+                      alt=""
+                      src={`https://image.tmdb.org/t/p/w500${man.profile_path}`}
+                    />
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {man.name}
+                    </Typography>
+                  </div>
+                ),
+              )}
+            </Grid>
+            <Grid container>
+              <Typography variant="body2" color="textPrimary" component="p" className={classes.overwiew}>
+                {movie.overview}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+      {/* <Card className={classes.card}>
         <CardMedia
           className={classes.media}
           image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -109,7 +161,7 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
             </IconButton>
           </CardActions>
         </div>
-      </Card>
+      </Card> */}
       {!!movie.overview && (
         <>
           <br />

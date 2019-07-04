@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { random } from 'lodash';
 import {
-  Button, Container, Grid, Typography, CircularProgress, makeStyles,
+  Container, Fab, Grid, Typography, CircularProgress, makeStyles,
 } from '@material-ui/core';
+import { ArrowBack, Search } from '@material-ui/icons';
 import { green } from '@material-ui/core/colors';
 import { getRandomMoviesList, getMovieCastAndCrew } from '../../../actions';
 import { MultipleGenresList } from './components/MultipleGenresList';
@@ -27,6 +28,11 @@ const useStyles = makeStyles({
   wrapper: {
     position: 'relative',
   },
+  fabSliders: {
+    width: '100px',
+    height: '100px',
+    margin: 'auto',
+  },
   buttonSuccess: {
     backgroundColor: green[500],
     '&:hover': {
@@ -44,7 +50,7 @@ const useStyles = makeStyles({
     color: green[500],
     position: 'absolute',
     top: '50%',
-    right: '5px',
+    right: '50%',
     marginTop: -12,
     marginLeft: -12,
   },
@@ -106,34 +112,38 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
             />
           </Grid>
         </Grid>
-        <Grid container spacing={5} justify="center">
-          <Grid item xs={8}>
-            <div className={classes.wrapper}>
-              <Button
-                fullWidth
-                color="primary"
-                variant="contained"
-                onClick={handleFindMovie}
-                disabled={isLoading}
-              >
-                НАЙТИ
-              </Button>
-              {isLoading && (
-                <CircularProgress
-                  size={24}
-                  className={classes.buttonProgress}
-                />
-              )}
-            </div>
-          </Grid>
-        </Grid>
         {randomMovie && (
-          <Grid container spacing={5} justify="center">
+          <Grid container spacing={5} justify="center" alignItems="center">
+            <Grid item md={2}>
+              <Fab color="primary" className={classes.fabSliders} disabled>
+                <ArrowBack fontSize="large" />
+                назад
+              </Fab>
+            </Grid>
             <Grid item xs={10} md={8}>
               <MovieInfoCard
                 movie={randomMovie}
                 getGenresNamesByIds={getGenresNamesByIds}
               />
+            </Grid>
+            <Grid item md={2}>
+              <div className={classes.wrapper}>
+                <Fab
+                  color="primary"
+                  className={classes.fabSliders}
+                  onClick={handleFindMovie}
+                  disabled={isLoading}
+                >
+                  НАЙТИ
+                  <Search fontSize="large" />
+                </Fab>
+                {isLoading && (
+                  <CircularProgress
+                    size={112}
+                    className={classes.fabProgress}
+                  />
+                )}
+              </div>
             </Grid>
           </Grid>
         )}
