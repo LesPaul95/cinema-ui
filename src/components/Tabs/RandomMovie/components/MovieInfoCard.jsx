@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // import moment from 'moment';
 // import clsx from 'clsx';
 import {
@@ -7,20 +7,23 @@ import {
   // CardMedia,
   // CardContent,
   // CardActions,
-  Collapse,
   Avatar,
   // IconButton,
   Typography,
   Grid,
   Paper,
 } from '@material-ui/core';
+import StarsRating from 'stars-rating';
+import { People, Movie } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
   cardHeader: {
     backgroundColor: '#3A2E39',
+    borderTopLeftRadius: '4px',
+    borderTopRightRadius: '4px',
+    height: '3em',
   },
   cast: {
     margin: '5px',
@@ -44,18 +47,15 @@ const useStyles = makeStyles(theme => ({
     width: 60,
     height: 60,
   },
+  rating: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+  },
 }));
 
 export function MovieInfoCard({ movie, getGenresNamesByIds }) {
   const classes = useStyles();
   const cast = movie.cast || [];
-  const [expanded, setExpanded] = React.useState(false);
-
-  // function handleExpandClick() {
-  //   setExpanded(!expanded);
-  // }
-
-  useEffect(() => setExpanded(false), [movie]);
 
   const width = document.getElementById('movieInfoGridContainer') && document.getElementById('movieInfoGridContainer').offsetWidth;
 
@@ -63,17 +63,26 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
     <>
       <Paper>
 
-        <Grid container justify="center" className={classes.cardHeader}>
+        <Grid container justify="center" alignItems="center" className={classes.cardHeader}>
           <Grid item xs={1}>
-            <Avatar>{movie.vote_average}</Avatar>
+            <Movie color="secondary" />
           </Grid>
-          <Grid item xs={11}>
+          <Grid item xs={6}>
             <Typography variant="body1" color="secondary" component="p">
               {movie.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               {getGenresNamesByIds(movie.genre_ids)}
             </Typography>
+          </Grid>
+          <Grid item xs={5} className={classes.rating}>
+            <StarsRating
+              count={5}
+              edit={false}
+              size={24}
+              value={movie.vote_average / 2}
+            />
+            <span>{movie.vote_average}</span>
           </Grid>
         </Grid>
 
@@ -90,11 +99,18 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
               {cast.map(
                 (man, index) => index < 5 && (
                   <div key={man.id} className={classes.cast}>
-                    <Avatar
-                      className={classes.avatar}
-                      alt=""
-                      src={`https://image.tmdb.org/t/p/w500${man.profile_path}`}
-                    />
+                    {man.profile_path
+                      ? (
+                        <Avatar
+                          className={classes.avatar}
+                          src={`https://image.tmdb.org/t/p/w500${man.profile_path}`}
+                        />
+                      )
+                      : (
+                        <Avatar className={classes.avatar}>
+                          <People />
+                        </Avatar>
+                      )}
                     <Typography
                       variant="body2"
                       color="textSecondary"
@@ -114,68 +130,6 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
           </Grid>
         </Grid>
       </Paper>
-      {/* <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          title={movie.title}
-        />
-        <div className={classes.info}>
-          <CardHeader
-            avatar={
-              <Avatar className={classes.avatar}>{movie.vote_average}</Avatar>
-            }
-            title={movie.title}
-            subheader={moment(movie.release_date).format('DD.MM.YYYY')}
-          />
-          <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {getGenresNamesByIds(movie.genre_ids)}
-            </Typography>
-          </CardContent>
-          <CardContent>
-            {cast.map(
-              (man, index) => index < 15 && (
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
-                key={man.id}
-              >
-                {man.name}
-              </Typography>
-              ),
-            )}
-          </CardContent>
-          <CardActions>
-            <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="Show more"
-              disabled={!movie.overview}
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-        </div>
-      </Card> */}
-      {!!movie.overview && (
-        <>
-          <br />
-          <Grid container spacing={5} justify="center">
-            <Grid item xs={12}>
-              <Paper>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <Typography paragraph>{movie.overview}</Typography>
-                </Collapse>
-              </Paper>
-            </Grid>
-          </Grid>
-        </>
-      )}
     </>
   );
 }

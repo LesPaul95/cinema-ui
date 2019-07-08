@@ -1,12 +1,9 @@
-// Tab on React Hooks
 import React, { useState, useEffect } from 'react';
-import { random } from 'lodash';
 import {
   Container, Fab, Grid, Typography, CircularProgress, makeStyles,
 } from '@material-ui/core';
-import { ArrowBack, Search } from '@material-ui/icons';
+import { ArrowBackIos, ArrowForwardIos, Search } from '@material-ui/icons';
 import { green } from '@material-ui/core/colors';
-import { getRandomMoviesList, getMovieCastAndCrew } from '../../../actions';
 import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
@@ -24,9 +21,11 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   wrapper: {
     position: 'relative',
+    display: 'flex',
   },
   fabSliders: {
     width: '100px',
@@ -56,24 +55,35 @@ const useStyles = makeStyles({
   },
 });
 
-export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }) {
+export function RandomMovie({
+  genres,
+  getGenresIdsByNames,
+  getGenresNamesByIds,
+  currentMovie,
+  setNextMovie,
+  setPrevMovie,
+  hasPrevMovie,
+  hasNextMovie,
+}) {
   const classes = useStyles();
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [yearRange, setYearRange] = useState([minYear, currentYear]);
+  const [yearRange, setYearRange] = useState([
+    minYear,
+    currentYear,
+  ]);
   const [voteRange, setVoteRange] = useState([0, 10]);
-  const [randomMovie, setRandomMovie] = useState(null);
+  // const [randomMovie, setRandomMovie] = useState(null);
 
-  const handleFindMovie = async () => {
+  const handleNextMovieButton = async () => {
     setIsLoading(true);
     const genresIds = getGenresIdsByNames(selectedGenres);
-    const { results } = await getRandomMoviesList(yearRange, voteRange, genresIds);
-    const randomMovieResponse = results[random(0, results.length - 1)];
-    const castAndCrew = randomMovieResponse && randomMovieResponse.id
-      ? await getMovieCastAndCrew(randomMovieResponse.id) : {};
-    console.log({ ...randomMovieResponse, ...castAndCrew });
-    setRandomMovie({ ...randomMovieResponse, ...castAndCrew });
+    await setNextMovie(yearRange, voteRange, genresIds);
     setIsLoading(false);
+  };
+
+  const handlePrevMovieButton = async () => {
+    setPrevMovie();
   };
 
   const handleYearRangeChange = (event, newValue) => {
@@ -82,7 +92,7 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
 
   useEffect(() => {
     async function findFirstRandomMovie() {
-      await handleFindMovie();
+      await handleNextMovieButton();
     }
     findFirstRandomMovie();
   }, []);
@@ -112,37 +122,55 @@ export function RandomMovie({ genres, getGenresIdsByNames, getGenresNamesByIds }
             />
           </Grid>
         </Grid>
-        {randomMovie && (
+        {currentMovie && (
           <Grid container spacing={5} justify="center" alignItems="center">
             <Grid item md={2}>
-              <Fab color="primary" className={classes.fabSliders} disabled>
-                <ArrowBack fontSize="large" />
-                назад
-              </Fab>
+              <div className={classes.root}>
+                <Fab
+                  color="primary"
+                  className={classes.fabSliders}
+                  onClick={handlePrevMovieButton}
+                  disabled={!hasPrevMovie}
+                >
+                  <ArrowBackIos fontSize="large" />
+                  Назад
+                </Fab>
+              </div>
             </Grid>
             <Grid item xs={10} md={8}>
               <MovieInfoCard
-                movie={randomMovie}
+                movie={currentMovie}
                 getGenresNamesByIds={getGenresNamesByIds}
               />
             </Grid>
             <Grid item md={2}>
-              <div className={classes.wrapper}>
-                <Fab
-                  color="primary"
-                  className={classes.fabSliders}
-                  onClick={handleFindMovie}
-                  disabled={isLoading}
-                >
-                  НАЙТИ
-                  <Search fontSize="large" />
-                </Fab>
-                {isLoading && (
-                  <CircularProgress
-                    size={112}
-                    className={classes.fabProgress}
-                  />
-                )}
+              <div className={classes.root}>
+                <div className={classes.wrapper}>
+                  <Fab
+                    color="primary"
+                    className={classes.fabSliders}
+                    onClick={handleNextMovieButton}
+                    disabled={isLoading}
+                  >
+                    {!hasNextMovie ? (
+                      <>
+                        Вперед
+                        <ArrowForwardIos fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        Найти
+                        <Search fontSize="large" />
+                      </>
+                    )}
+                  </Fab>
+                  {isLoading && (
+                    <CircularProgress
+                      size={112}
+                      className={classes.fabProgress}
+                    />
+                  )}
+                </div>
               </div>
             </Grid>
           </Grid>
