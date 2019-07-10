@@ -8,6 +8,7 @@ import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
 import { VoteRange } from './components/VoteRange';
+import './RandomMovie.css';
 
 function getCurrentYear() {
   const date = new Date();
@@ -32,26 +33,12 @@ const useStyles = makeStyles({
     height: '100px',
     margin: 'auto',
   },
-  buttonSuccess: {
-    backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
-    },
-  },
   fabProgress: {
     color: green[500],
     position: 'absolute',
     top: -6,
     left: -6,
     zIndex: 1,
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    right: '50%',
-    marginTop: -12,
-    marginLeft: -12,
   },
 });
 
@@ -73,7 +60,6 @@ export function RandomMovie({
     currentYear,
   ]);
   const [voteRange, setVoteRange] = useState([0, 10]);
-  // const [randomMovie, setRandomMovie] = useState(null);
 
   const handleNextMovieButton = async () => {
     setIsLoading(true);
@@ -124,7 +110,7 @@ export function RandomMovie({
         </Grid>
         {currentMovie && (
           <Grid container spacing={5} justify="center" alignItems="center">
-            <Grid item md={2}>
+            <Grid item xs={6} md={2}>
               <div className={classes.root}>
                 <Fab
                   color="primary"
@@ -137,13 +123,13 @@ export function RandomMovie({
                 </Fab>
               </div>
             </Grid>
-            <Grid item xs={10} md={8}>
+            <Grid item xs={10} md={8} className="movieInfoGrid">
               <MovieInfoCard
                 movie={currentMovie}
                 getGenresNamesByIds={getGenresNamesByIds}
               />
             </Grid>
-            <Grid item md={2}>
+            <Grid item xs={6} md={2}>
               <div className={classes.root}>
                 <div className={classes.wrapper}>
                   <Fab

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
+import { isProd } from '../../constants';
 import { Header } from '../Header';
 
-const DevTools = React.lazy(() => (process.env.NODE_ENV === 'production'
+const DevTools = React.lazy(() => (isProd
   ? Promise.resolve({ default: () => null })
   : import('mobx-react-devtools')));
 
