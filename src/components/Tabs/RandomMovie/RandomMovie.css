@@ -1,3 +1,11 @@
+.noFound {
+  display: flex;
+  align-items: center;
+}
+.noFound > div{
+  margin: auto;
+}
+
 @media(max-width: 959px) {
   .movieInfoGrid {
       order: 2;

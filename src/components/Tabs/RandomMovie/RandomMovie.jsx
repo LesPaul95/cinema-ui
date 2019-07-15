@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container, Fab, Grid, Typography, CircularProgress, makeStyles,
+  Container, Fab, Grid, Typography, CircularProgress, makeStyles, Paper,
 } from '@material-ui/core';
 import { ArrowBackIos, ArrowForwardIos, Search } from '@material-ui/icons';
 import { green } from '@material-ui/core/colors';
@@ -8,6 +8,7 @@ import { MultipleGenresList } from './components/MultipleGenresList';
 import { MovieInfoCard } from './components/MovieInfoCard';
 import { YearRange } from './components/YearRange';
 import { VoteRange } from './components/VoteRange';
+import NoPoster from '../../../assets/no-poster.png';
 import './RandomMovie.css';
 
 function getCurrentYear() {
@@ -108,59 +109,66 @@ export function RandomMovie({
             />
           </Grid>
         </Grid>
-        {currentMovie && (
-          <Grid container spacing={5} justify="center" alignItems="center">
-            <Grid item xs={6} md={2}>
-              <div className={classes.root}>
+        <Grid container spacing={5} justify="center" alignItems="center">
+          <Grid item xs={6} md={2}>
+            <div className={classes.root}>
+              <Fab
+                color="primary"
+                className={classes.fabSliders}
+                onClick={handlePrevMovieButton}
+                disabled={!hasPrevMovie}
+              >
+                <ArrowBackIos fontSize="large" />
+                Назад
+              </Fab>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={8} className="movieInfoGrid">
+            <Paper>
+              {currentMovie && currentMovie.id ? (
+                <MovieInfoCard
+                  movie={currentMovie}
+                  getGenresNamesByIds={getGenresNamesByIds}
+                />
+              ) : (
+                <div className="noFound">
+                  <img src={NoPoster} alt="" />
+                  <div>Не найдено фильмов, попробойте изменить фильтры поиска</div>
+                </div>
+              )}
+            </Paper>
+          </Grid>
+          <Grid item xs={6} md={2}>
+            <div className={classes.root}>
+              <div className={classes.wrapper}>
                 <Fab
                   color="primary"
                   className={classes.fabSliders}
-                  onClick={handlePrevMovieButton}
-                  disabled={!hasPrevMovie}
+                  onClick={handleNextMovieButton}
+                  disabled={isLoading}
                 >
-                  <ArrowBackIos fontSize="large" />
-                  Назад
-                </Fab>
-              </div>
-            </Grid>
-            <Grid item xs={10} md={8} className="movieInfoGrid">
-              <MovieInfoCard
-                movie={currentMovie}
-                getGenresNamesByIds={getGenresNamesByIds}
-              />
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <div className={classes.root}>
-                <div className={classes.wrapper}>
-                  <Fab
-                    color="primary"
-                    className={classes.fabSliders}
-                    onClick={handleNextMovieButton}
-                    disabled={isLoading}
-                  >
-                    {!hasNextMovie ? (
-                      <>
-                        Вперед
-                        <ArrowForwardIos fontSize="large" />
-                      </>
-                    ) : (
-                      <>
-                        Найти
-                        <Search fontSize="large" />
-                      </>
-                    )}
-                  </Fab>
-                  {isLoading && (
-                    <CircularProgress
-                      size={112}
-                      className={classes.fabProgress}
-                    />
+                  {!hasNextMovie ? (
+                    <>
+                      Вперед
+                      <ArrowForwardIos fontSize="large" />
+                    </>
+                  ) : (
+                    <>
+                      Найти
+                      <Search fontSize="large" />
+                    </>
                   )}
-                </div>
+                </Fab>
+                {isLoading && (
+                  <CircularProgress
+                    size={112}
+                    className={classes.fabProgress}
+                  />
+                )}
               </div>
-            </Grid>
+            </div>
           </Grid>
-        )}
+        </Grid>
       </Typography>
     </Container>
   );

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { isProd } from '../../constants';
 import { Header } from '../Header';
+import { Footer } from '../Footer';
+import './App.css';
 
 const DevTools = React.lazy(() => (isProd
   ? Promise.resolve({ default: () => null })
@@ -22,7 +24,14 @@ export class App extends React.Component {
         <React.Suspense fallback={null}>
           <DevTools />
         </React.Suspense>
-        <Header />
+        <div className="wrapper">
+          <div className="content">
+            <Header />
+          </div>
+          <div className="footer">
+            <Footer />
+          </div>
+        </div>
       </>
     );
   }
