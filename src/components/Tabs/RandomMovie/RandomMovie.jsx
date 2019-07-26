@@ -132,8 +132,14 @@ export function RandomMovie({
                 />
               ) : (
                 <div className="noFound">
-                  <img src={NoPoster} alt="" />
-                  <div>Не найдено фильмов, попробойте изменить фильтры поиска</div>
+                  <img
+                    src={NoPoster}
+                    alt="Не найдено фильмов"
+                    title="Не найдено фильмов"
+                  />
+                  <div>
+                    Не найдено фильмов, попробойте изменить фильтры поиска
+                  </div>
                 </div>
               )}
             </Paper>

@@ -43,7 +43,7 @@ export function MovieInfoCard({ movie, getGenresNamesByIds }) {
         <Grid item xs={12} md={6}>
           <img
             src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : NoPoster}
-            alt=""
+            alt="Постер случайного фильма"
             className="poster"
           />
         </Grid>
